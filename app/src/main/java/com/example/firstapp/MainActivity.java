@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.content.SharedPreferences;
 import android.widget.CheckBox;
-
+import android.text.InputType;
 
 
 
@@ -42,6 +42,18 @@ public class MainActivity extends AppCompatActivity {
         // Gets the user inputs
         usernameInput = (EditText) findViewById(R.id.etUsername);
         passwordInput = (EditText) findViewById(R.id.etPassword);
+
+        // Show password logic
+        CheckBox cbShowPassword = findViewById(R.id.cbShowPassword);
+
+        cbShowPassword.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            } else {
+                passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            }
+            passwordInput.setSelection(passwordInput.getText().length()); // keep cursor at end
+        });
 
         cbRemember = findViewById(R.id.cbRemember);
 

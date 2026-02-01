@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import android.text.InputType;
+import android.widget.CheckBox;
 
 import java.util.HashMap;
 
@@ -36,6 +38,19 @@ public class RegisterActivity extends AppCompatActivity {
         // Gets the user inputs
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
+
+        //Show password logic
+        CheckBox cbShowPassword = findViewById(R.id.cbShowPassword);
+
+        cbShowPassword.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            } else {
+                etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            }
+            etPassword.setSelection(etPassword.getText().length());
+        });
+        //
 
         btnRegister = findViewById(R.id.btnRegister);
 
