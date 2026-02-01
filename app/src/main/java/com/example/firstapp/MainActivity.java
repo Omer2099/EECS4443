@@ -7,22 +7,32 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.content.SharedPreferences;
+import android.widget.CheckBox;
 
-import androidx.activity.EdgeToEdge;
+
+
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+
 public class MainActivity extends AppCompatActivity {
 
     EditText usernameInput;
     EditText passwordInput;
+    CheckBox cbRemember;
+
+    private static final String PREFS = "LoginPrefs";
+    private static final String KEY_REMEMBER = "remember";
+    private static final String KEY_USERNAME = "username";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -32,12 +42,28 @@ public class MainActivity extends AppCompatActivity {
         // Gets the user inputs
         usernameInput = (EditText) findViewById(R.id.etUsername);
         passwordInput = (EditText) findViewById(R.id.etPassword);
+
+        cbRemember = findViewById(R.id.cbRemember);
+
+        // login right away if Remember Me was clicked
+        SharedPreferences sp = getSharedPreferences(PREFS, MODE_PRIVATE);
+        boolean remember = sp.getBoolean(KEY_REMEMBER, false);
+        String savedUser = sp.getString(KEY_USERNAME, null);
+
+        if (remember && savedUser != null) {
+            Intent i = new Intent(this, WelcomepageActivity.class);
+            i.putExtra("Username", savedUser);
+            Toast.makeText(this, "User is remembered",Toast.LENGTH_LONG).show();
+            startActivity(i);
+            finish();
+        }
+
     }
 
     // Checks the user input and creates a new activity / sends user to the Welcome page
     public void login(View v)
     {
-       // Changes the Data type of the input to string
+        // Changes the Data type of the input to string
         String username = usernameInput.getText().toString();
         String password = passwordInput.getText().toString();
 
@@ -47,12 +73,38 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(this, WelcomepageActivity.class);
             i.putExtra("Username", username);
             Toast.makeText(this, "Login Successful",Toast.LENGTH_LONG).show();
+
+            // Checks if Remember me is checked and skips log in
+            SharedPreferences sp = getSharedPreferences(PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor ed = sp.edit();
+
+            if (cbRemember.isChecked()) {
+                ed.putBoolean(KEY_REMEMBER, true);
+                ed.putString(KEY_USERNAME, username);
+            } else {
+                ed.clear();
+            }
+            ed.apply();
+
             startActivity(i);
         }
         else if( users.containsKey(username) && password.equals(users.get(username)) )
         {
             Intent i = new Intent(this, WelcomepageActivity.class);
             i.putExtra("Username", username);
+
+            // Also Checks if Remember me is checked and skips log in
+            SharedPreferences sp = getSharedPreferences(PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor ed = sp.edit();
+
+            if (cbRemember.isChecked()) {
+                ed.putBoolean(KEY_REMEMBER, true);
+                ed.putString(KEY_USERNAME, username);
+            } else {
+                ed.clear();
+            }
+            ed.apply();
+
             startActivity(i);
         }
         else if ( (!username.equals("admin") && !password.equals("1234") )
