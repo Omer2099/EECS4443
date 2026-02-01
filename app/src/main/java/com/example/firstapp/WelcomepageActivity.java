@@ -1,5 +1,4 @@
 package com.example.firstapp;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -26,6 +25,7 @@ public class WelcomepageActivity extends AppCompatActivity {
             return insets;
         });
 
+
         // Gets the username from the previous activity
         textView = (TextView) findViewById(R.id.Welcome_textView);
         Intent i = getIntent();
@@ -35,9 +35,15 @@ public class WelcomepageActivity extends AppCompatActivity {
     }
 
     // Creates a new activity / goes back to the sign in page
-    public  void signout( View v)
+    public  void Signout( View v)
     {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
+
+        // Resets the Remember me check point
+        SharedPreferences sp = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        sp.edit().clear().apply();
+
+
     }
 }

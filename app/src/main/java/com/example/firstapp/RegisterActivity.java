@@ -10,7 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import java.util.HashMap;
 
@@ -18,36 +22,41 @@ public class RegisterActivity extends AppCompatActivity {
 
     EditText etUsername, etPassword;
     Button btnRegister;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.registerRoot), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
-        // Gets the user input
+        // Gets the user inputs
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
+
         btnRegister = findViewById(R.id.btnRegister);
 
+
         btnRegister.setOnClickListener(v -> {
-            // Changes the data type of the input to String
             String username = etUsername.getText().toString();
             String password = etPassword.getText().toString();
 
-            // Checks if the user has entered any data and checks to see if the username is taken or not
+            //check if there is input in both fields
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Fill all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
+            //checks if username already exists if yes it sends text "User already exist"
             if(users.containsKey(username)){
                 Toast.makeText(this, "User already exist", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // The username and password is stored
+            // else it add new username to the hashmap and sends text "User registered" and takes you to welcome page
             users.put(username, password);
-
-           // An alert is made to inform the user of the successful registration and creates a new activity/ user is sent to the Welcome page
             Toast.makeText(this, "User registered", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(this, WelcomepageActivity.class);
             i.putExtra("Username", username);
@@ -55,8 +64,8 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    // Creates a new activity / goes back to the sign in page
-    public void backout(View v)
+    // Creates a new activity and goes back to the sign in page
+    public  void backout(View v)
     {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
