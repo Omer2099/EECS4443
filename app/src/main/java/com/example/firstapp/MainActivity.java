@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
 
     EditText usernameInput;
     EditText passwordInput;
-   // Button login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,17 +29,19 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        // Gets the user inputs
         usernameInput = (EditText) findViewById(R.id.etUsername);
         passwordInput = (EditText) findViewById(R.id.etPassword);
     }
 
+    // Checks the user input and creates a new activity / sends user to the Welcome page
     public void login(View v)
     {
+       // Changes the Data type of the input to string
         String username = usernameInput.getText().toString();
         String password = passwordInput.getText().toString();
 
-
+        // Validates the username and password with the admin or registered users. An alert is made when the input is invalid or incorrect.
         if( username.equals("admin") && password.equals("1234"))
         {
             Intent i = new Intent(this, WelcomepageActivity.class);
@@ -65,12 +66,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // creates a new activity / sends user to the Register page
     public  void register( View v)
     {
         Intent i = new Intent(this, RegisterActivity.class);
         startActivity(i);
     }
 
+    // Clears the fields of data inputted
     public void cancel( View v)
     {
         usernameInput.setText("");

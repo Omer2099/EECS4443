@@ -25,7 +25,7 @@ public class WelcomepageActivity extends AppCompatActivity {
             return insets;
         });
 
-
+        // Gets the username from the previous activity
         textView = (TextView) findViewById(R.id.Welcome_textView);
         Intent i = getIntent();
         String user = i.getStringExtra("Username");
@@ -33,6 +33,7 @@ public class WelcomepageActivity extends AppCompatActivity {
         textView.setText("Welcome "+user);
     }
 
+    // Creates a new activity / goes back to the sign in page
     public  void signout( View v)
     {
         Intent i = new Intent(this, MainActivity.class);
